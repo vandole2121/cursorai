@@ -357,6 +357,18 @@ function cornerHitFor(item, fboX, fboY) {
   return null;
 }
 
+function pickOpenCornerAt(fboX, fboY) {
+  const worldList = flattenWorld(rootBox);
+  for (let i = worldList.length - 1; i >= 0; i--) {
+    const item = worldList[i];
+    const corner = cornerHitFor(item, fboX, fboY);
+    if (corner) {
+      return { item, corner };
+    }
+  }
+  return null;
+}
+
 function startLongPress(item, fboX, fboY) {
   clearLongPress();
   if (!item || !item.box.isOpen) return;
@@ -394,6 +406,20 @@ function onPointerDown(e) {
   interaction.startPointerFbo = { x: p.x, y: p.y };
   interaction.lastPointerFbo = { x: p.x, y: p.y };
 
+  // Corner resize: prefer any open box's corner under the pointer, even if overlapped by children
+  const cornerPick = pickOpenCornerAt(p.x, p.y);
+  if (cornerPick) {
+    const { item, corner } = cornerPick;
+    interaction.targetId = item.box.id;
+    interaction.mode = 'drag-resize';
+    interaction.corner = corner;
+    interaction.startLocal = { x: item.box.localX, y: item.box.localY, w: item.box.localW, h: item.box.localH };
+    interaction.parentWorldScaleAtStart = item.parentScale; // For translating pos deltas
+    interaction.childWorldScaleAtStart = item.worldScale; // For size deltas
+    clearLongPress();
+    return;
+  }
+
   const pick = pickTopmostBoxAt(p.x, p.y);
   if (!pick) {
     interaction.mode = 'none';
@@ -406,18 +432,6 @@ function onPointerDown(e) {
   interaction.targetId = item.box.id;
 
   // Right-button: handled on contextmenu separately for close action.
-
-  // Corner resize if open and near corner
-  const corner = cornerHitFor(item, p.x, p.y);
-  if (corner) {
-    interaction.mode = 'drag-resize';
-    interaction.corner = corner;
-    interaction.startLocal = { x: item.box.localX, y: item.box.localY, w: item.box.localW, h: item.box.localH };
-    interaction.parentWorldScaleAtStart = item.parentScale; // For translating pos deltas
-    interaction.childWorldScaleAtStart = item.worldScale; // For size deltas
-    clearLongPress();
-    return;
-  }
 
   // Otherwise prepare to move
   interaction.mode = 'none'; // becomes drag-move after small threshold
