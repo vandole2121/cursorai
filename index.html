@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebGL Boxes</title>
+  <style>
+    html, body { height: 100%; margin: 0; background: #111; color: #ddd; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    #glcanvas { display: block; width: 100vw; height: 100vh; image-rendering: pixelated; image-rendering: crisp-edges; touch-action: none; }
+    .hud { position: fixed; left: 12px; bottom: 12px; background: rgba(0,0,0,0.5); padding: 8px 10px; border-radius: 6px; font-size: 12px; line-height: 1.3; }
+    .hud kbd { background: #222; border: 1px solid #333; padding: 0 4px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <canvas id="glcanvas"></canvas>
+  <div class="hud">
+    <div><strong>Interactions</strong></div>
+    <div>• Drag a box to move it</div>
+    <div>• Double-click to <em>open</em> (zoom x8)</div>
+    <div>• Right-click to <em>close</em> (zoom x1)</div>
+    <div>• When open: drag a corner to resize</div>
+    <div>• When open: long-press to create a child box</div>
+  </div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
