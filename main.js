@@ -268,7 +268,7 @@ function render() {
   // Render to offscreen (low-res) target
   gl.bindFramebuffer(gl.FRAMEBUFFER, offscreen.fbo);
   gl.viewport(0, 0, offscreen.width, offscreen.height);
-  gl.clearColor(0.07, 0.07, 0.07, 1);
+  gl.clearColor(1, 1, 1, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
   const worldList = flattenWorld(rootBox);
@@ -297,7 +297,7 @@ function render() {
   // Blit to screen (nearest upscaling)
   gl.bindFramebuffer(gl.FRAMEBUFFER, null);
   gl.viewport(0, 0, canvas.width, canvas.height);
-  gl.clearColor(0, 0, 0, 1);
+  gl.clearColor(1, 1, 1, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
 
   gl.useProgram(blitProgram);
